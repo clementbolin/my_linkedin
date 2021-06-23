@@ -12,7 +12,7 @@ export const Login = () => {
                 </a>
                 <div>
                     <Join>Join Now</Join>
-                    <SignIn>Sign In</SignIn>
+                    <SignIn href='/home'>Sign In</SignIn>
                 </div>
             </Nav>
             <Section>
