@@ -128,6 +128,9 @@ const Search = styled.div`
             vertical-align: text-top;
         }
     }
+    @media (max-width: 910px) {
+        padding: 8px;
+    }
 `
 
 const SearchIcon = styled.div`
@@ -135,13 +138,17 @@ const SearchIcon = styled.div`
     z-index: 1;
     top: 10px;
     left: 10px;
+    @media (max-width: 910px) {
+        top: 17px;
+        left: 19px;
+    }
 `
 
 const NavIcon = styled.nav`
     margin-left: auto;
     display: block;
-    @media (max-width: 768px) {
-        left: -100;
+    @media (max-width: 910px) {
+        left: 0;
         bottom: 0;
         width: 100%;
         background-color: white;
