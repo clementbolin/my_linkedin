@@ -86,7 +86,7 @@ const CardBacground = styled.div`
     margin: -12px -12px 0;
 `
 
-const Photo = styled.div`
+export const Photo = styled.div`
     box-shadow: none;
     width: 72px;
     height: 72px;
