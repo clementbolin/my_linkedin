@@ -82,11 +82,11 @@ const ShareBox = styled(CommonCard)`
                 background-color: white;
                 text-align: left;
             }
-            &:nth-child(1 ) {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-            }
+        }
+        &:nth-child(2) {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
         }
         .img {
             width: 40px;
