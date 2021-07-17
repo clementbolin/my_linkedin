@@ -3,7 +3,11 @@ import Logo from './login-logo.svg'
 import backLogo from './../../assets/login-hero.svg'
 import { FcGoogle } from 'react-icons/fc'
 
-export const Login = () => {
+type Props = {
+    signInAPI: () => void
+}
+
+export const Login: React.FC<Props> = ({ signInAPI }) => {
     return (
         <Container>
             <Nav>
@@ -21,7 +25,7 @@ export const Login = () => {
                     <img src={backLogo} alt="hero logo" />
                 </Hero>
                 <Form>
-                    <Google>
+                    <Google onClick={() => signInAPI()}>
                         <FcGoogle style={{marginRight: '10px'}} />
                         Sign in with Google
                     </Google>
@@ -175,3 +179,13 @@ const Google = styled.button`
         color: rgba(0, 0, 0, 0.75);
     }
 `
+
+// const mapStateToProps = (state: any) => {
+//     return {}
+// }
+
+// const mapDispatchToProps = (dispatcher: any) => ({
+//     signIn: () => dispatcher(signInAPI()),
+// })
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Login)
