@@ -2,14 +2,24 @@ import styled from 'styled-components'
 import Logo from './login-logo.svg'
 import backLogo from './../../assets/login-hero.svg'
 import { FcGoogle } from 'react-icons/fc'
+import { shallowEqual, useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 type Props = {
     signInAPI: () => void
 }
 
 export const Login: React.FC<Props> = ({ signInAPI }) => {
+    const payloadGoogle = useSelector(
+        (state: any) => state,
+        shallowEqual
+    )
     return (
         <Container>
+            {
+                payloadGoogle.user &&
+                <Redirect to='/home'/>
+            }
             <Nav>
                 <a href='/'>
                     <img src={Logo} alt="" />
@@ -179,13 +189,3 @@ const Google = styled.button`
         color: rgba(0, 0, 0, 0.75);
     }
 `
-
-// const mapStateToProps = (state: any) => {
-//     return {}
-// }
-
-// const mapDispatchToProps = (dispatcher: any) => ({
-//     signIn: () => dispatcher(signInAPI()),
-// })
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Login)
