@@ -2,7 +2,7 @@ import { auth, provider } from "../firebase"
 import firebase from "firebase"
 import { SET_USER } from "./actionTypes"
 
-export const setUser = (payload: firebase.auth.UserCredential) => ({
+export const setUser = (payload: firebase.User | null) => ({
     type: SET_USER,
     payload: payload
 })
@@ -13,8 +13,18 @@ export const signInAPI = () => {
         console.log("Create popup")
         auth.signInWithPopup(provider)
             .then((payload: firebase.auth.UserCredential) => {
-                dispatch(setUser(payload))
+                dispatch(setUser(payload.user))
             })
             .catch(error => alert(error.message))
+    }
+}
+
+export const getUserAuth = () => {
+    return (dispatch: any) => {
+        auth.onAuthStateChanged(async (user: any) => {
+            if (user) {
+                dispatch(setUser(user))
+            }
+        })
     }
 }

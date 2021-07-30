@@ -5,8 +5,12 @@ import { AiOutlineSearch, AiFillHome, AiFillMessage } from 'react-icons/ai'
 import { BsPeopleFill, BsGrid3X3Gap } from 'react-icons/bs'
 import { RiSuitcaseFill } from 'react-icons/ri'
 import { MdNotifications } from 'react-icons/md'
+import { useSelector } from 'react-redux'
+import { UserState } from '../../reducers/userReducer'
 
 export const Header = () => {
+    const user = useSelector<UserState, UserState["user"]>((state) => state.user)
+
     return (
         <Container>
             <Content>
@@ -57,8 +61,8 @@ export const Header = () => {
                         </NavItem>
                         <User>
                             <a href="/home">
-                                <img src={UserLogo} alt="usr logo" />
-                                <span>Me</span>
+                                {user.photoURL ? <img src={user.photoURL} alt="usr logo" /> : <img src={UserLogo} alt="usr logo" />}
+                                {user.displayName ? <span>{user.displayName}</span> : <span>Me</span>}
                             </a>
                             <SignOut>
                                 <a href='/'>
