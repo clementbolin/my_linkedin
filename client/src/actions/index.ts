@@ -28,3 +28,12 @@ export const getUserAuth = () => {
         })
     }
 }
+
+export const signOutAPI = () => {
+    console.log("Start sign out")
+    return (dispatch: any) => {
+        auth.signOut()
+            .then(() => dispatch(setUser(null)))
+            .catch((err) => alert(err))
+    }
+}

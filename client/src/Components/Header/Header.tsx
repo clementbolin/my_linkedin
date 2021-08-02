@@ -8,7 +8,11 @@ import { MdNotifications } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { UserState } from '../../reducers/userReducer'
 
-export const Header = () => {
+type Props = {
+    signOutAPI: () => void
+}
+
+export const Header: React.FC<Props> = (props) => {
     const user = useSelector<UserState, UserState["user"]>((state) => state.user)
 
     return (
@@ -61,10 +65,10 @@ export const Header = () => {
                         </NavItem>
                         <User>
                             <a href="/home">
-                                {user.photoURL ? <img src={user.photoURL} alt="usr logo" /> : <img src={UserLogo} alt="usr logo" />}
-                                {user.displayName ? <span>{user.displayName}</span> : <span>Me</span>}
+                                {user && user.photoURL ? <img src={user.photoURL} alt="usr logo" /> : <img src={UserLogo} alt="usr logo" />}
+                                {user && user.displayName ? <span>{user.displayName}</span> : <span>Me</span>}
                             </a>
-                            <SignOut>
+                            <SignOut onClick={() => props.signOutAPI()}>
                                 <a href='/'>
                                     Sign Out
                                 </a>

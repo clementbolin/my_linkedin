@@ -1,11 +1,19 @@
+import { useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
+import { UserState } from '../../reducers/userReducer'
 import { LeftSideComponent } from './LeftSide'
 import { MainComponent } from './MainSide'
 import { RightSideComponent } from './RightSide'
 
 export const Home = () => {
+    const user = useSelector<UserState, UserState["user"]>((state) => state.user)
+
     return (
         <Container>
+            {
+                !user && <Redirect to='/'/>
+            }
             <Layout>
                 <LeftSideComponent />
                 <MainComponent />
