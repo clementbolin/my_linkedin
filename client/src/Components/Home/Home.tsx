@@ -15,7 +15,7 @@ export const Home = () => {
                 !user && <Redirect to='/'/>
             }
             <Layout>
-                <LeftSideComponent />
+                <LeftSideComponent user={user} />
                 <MainComponent />
                 <RightSideComponent />
             </Layout>

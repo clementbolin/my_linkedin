@@ -7,14 +7,34 @@ import { GrArticle } from 'react-icons/gr'
 import { IoMdShareAlt } from 'react-icons/io'
 import { AiFillLike, AiFillHeart, AiOutlineComment } from 'react-icons/ai'
 import Photo from './../../assets/naruto.jpeg'
+import { PostModal } from './PostModal'
+import { useState } from 'react'
 
 export const MainComponent = (): JSX.Element => {
+    const [showModal, setShowModal] = useState<string>('close')
+
+    const handleClick = (e: any) => {
+        e.preventDefault()
+        if (e.target !== e.currentTarget)
+            return
+        switch (showModal) {
+            case 'close':
+                setShowModal('open')
+                break
+            case 'open':
+                setShowModal('close')
+                break
+            default:
+                setShowModal('close')
+                break
+        }
+    }
     return (
         <Container>
             <ShareBox>
                 <div>
                     <img src={PictureUsr} alt="" className="img"/>
-                    <button>Start a post</button>
+                    <button onClick={handleClick}>Start a post</button>
                 </div>
                 <div>
                     <button>
@@ -94,6 +114,7 @@ export const MainComponent = (): JSX.Element => {
                     </SocialAction>
                 </Article>
             </div>
+            <PostModal showModal={showModal} handleClick={handleClick}/>
         </Container>
     )
 }
