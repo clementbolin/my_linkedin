@@ -15,8 +15,8 @@ export const MainComponent = (): JSX.Element => {
 
     const handleClick = (e: any) => {
         e.preventDefault()
-        if (e.target !== e.currentTarget)
-            return
+        // if (e.target !== e.currentTarget)
+        //     return
         switch (showModal) {
             case 'close':
                 setShowModal('open')
