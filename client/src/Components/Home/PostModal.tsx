@@ -7,6 +7,7 @@ import { ImYoutube } from 'react-icons/im'
 import { GrGallery } from 'react-icons/gr'
 import { RiShareForward2Fill } from 'react-icons/ri'
 import { useState } from "react";
+import ReactPlayer from 'react-player'
 
 type Props = {
     showModal: string
@@ -15,10 +16,33 @@ type Props = {
 
 export const PostModal: React.FC<Props> = (props) => {
     const [editorText, setEditorText] = useState<string>("")
+    const [shareImage, setShareImage] = useState<string>("")
+    const [videoLink, setVideoLink] = useState<string>("")
+    const [assetArea, setAssetArea] = useState<string>("")
     const user = useSelector<UserState, UserState['user']>((state) => state.user)
+
+
+    const handleChange = (e: any) => {
+        const image = e.target.files[0]
+
+        if (image === "" || image === undefined) {
+            alert(`Not an image, the file is a ${typeof image}`)
+            return
+        }
+        setShareImage(image)
+    }
+
+    const switchAssetArea = (area: any) => {
+        setShareImage('')
+        setVideoLink('')
+        setAssetArea(area)
+    }
 
     const reset = (e: any) => {
         setEditorText("")
+        setShareImage("")
+        setVideoLink("")
+        setAssetArea('')
         props.handleClick(e)
     }
     return (
@@ -52,24 +76,55 @@ export const PostModal: React.FC<Props> = (props) => {
                                 placeholder="What do you want to talk about"
                                 autoFocus={true}
                             />
+                            {
+                                assetArea === 'image' ? (
+                                <UploadImage>
+                                    <input type="file" 
+                                        accept='image/gif, image/jpeg, image/png'
+                                        name="image"
+                                        id='file'
+                                        onChange={handleChange}
+                                        style={{display: 'none'}}
+                                    />
+                                    <p>
+                                        <label htmlFor="file">
+                                            Select image to share
+                                        </label>
+                                    </p>
+                                    {shareImage && (
+                                        <img src={URL.createObjectURL(shareImage)} alt='your img'/>
+                                    )}
+                                </UploadImage>
+                                ) : ( 
+                                assetArea === 'media' && 
+                                <>
+                                    <input type='text'
+                                        placeholder='video Link' 
+                                        value={videoLink}
+                                        onChange={(e) => setVideoLink(e.target.value)}
+                                    />
+                                    {videoLink && <ReactPlayer width='100%' url={videoLink} />}
+                                </>
+                                )
+                            }
                         </Editor>
                     </ShareContent>
                     <ShareCreation>
                         <AttachAssets>
-                            <AssetButton>
-                                <GrGallery />
+                            <AssetButton onClick={() => switchAssetArea('image')}>
+                                <GrGallery fontSize='20px' />
                             </AssetButton>
-                            <AssetButton>
-                                <ImYoutube />
+                            <AssetButton onClick={() => switchAssetArea('media')}>
+                                <ImYoutube fontSize='20px'/>
                             </AssetButton>
                         </AttachAssets>
                         <ShareComment>
                             <AssetButton>
-                                <RiShareForward2Fill />
-                                Send
+                                <RiShareForward2Fill fontSize='20px'/>
+                                Share
                             </AssetButton>
                         </ShareComment>
-                        <PostButton>
+                        <PostButton disabled={!editorText ? true : false}>
                             Post
                         </PostButton>
                     </ShareCreation>
@@ -167,9 +222,17 @@ const ShareCreation = styled.div`
 const AssetButton = styled.button`
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 40px;
     min-height: auto;
     color: rgba(0, 0, 0, 0.5);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 15%;
+    }
 `
 
 const AttachAssets = styled.div`
@@ -178,6 +241,9 @@ const AttachAssets = styled.div`
     padding-right: 8px;
     ${AssetButton} {
         width: 40px;
+        &:hover {
+            border-radius: 50%;
+        }
     }
 `
 
@@ -197,10 +263,13 @@ const PostButton = styled.button`
     border-radius: 16px;
     padding-left: 16px;
     padding-right: 16px;
-    background: #0a66c2;
-    color: white;
+    border: none;
+    height: 35px;
+    background: ${(disabled: any) => (disabled.disabled ? 'rgba(0, 0, 0, 0.08)' : '#0a66c2')};
+    color: ${(disabled: any) => (disabled.disabled ? 'rgba(0, 0, 0, 0.3)' : 'white')};
     &:hover {
-        background: #004182;
+        background: ${(disabled: any) => (disabled.disabled ? 'rgba(0, 0, 0, 0.08)' : '#004182')};
+        cursor: ${(disabled: any) => (!disabled.disabled && 'pointer')};
     }
 `
 
@@ -217,5 +286,12 @@ const Editor = styled.div`
         height: 25px;
         font-size: 16px;
         margin-bottom: 20px;
+    }
+`
+
+const UploadImage = styled.div`
+    text-align: center;
+    img {
+        width: 100%;
     }
 `
