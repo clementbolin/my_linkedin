@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { AiOutlineClose } from 'react-icons/ai'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserState } from "../../reducers/userReducer";
 import PictureUsr from './../../assets/user.svg'
 import { ImYoutube } from 'react-icons/im'
 import { GrGallery } from 'react-icons/gr'
 import { RiShareForward2Fill } from 'react-icons/ri'
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import ReactPlayer from 'react-player'
+import { postArticleAPI } from "../../actions";
+import { useCallback } from "react";
+import firebase from 'firebase'
 
 type Props = {
     showModal: string
@@ -19,8 +22,14 @@ export const PostModal: React.FC<Props> = (props) => {
     const [shareImage, setShareImage] = useState<string>("")
     const [videoLink, setVideoLink] = useState<string>("")
     const [assetArea, setAssetArea] = useState<string>("")
+    
     const user = useSelector<UserState, UserState['user']>((state) => state.user)
 
+    const dispatch: Dispatch<any> = useDispatch()
+    const postArticle = useCallback(
+        (p) => dispatch(postArticleAPI(p)),
+        [dispatch]
+    )
 
     const handleChange = (e: any) => {
         const image = e.target.files[0]
@@ -45,6 +54,20 @@ export const PostModal: React.FC<Props> = (props) => {
         setAssetArea('')
         props.handleClick(e)
     }
+
+    const handlePost = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+        const payload = {
+            image: shareImage,
+            video: videoLink,
+            user: user,
+            description: editorText,
+            timestamp: firebase.firestore.Timestamp.now()
+        }
+        postArticle(payload)
+        reset(e)
+    }
+
     return (
         <>
             {
@@ -124,7 +147,9 @@ export const PostModal: React.FC<Props> = (props) => {
                                 Share
                             </AssetButton>
                         </ShareComment>
-                        <PostButton disabled={!editorText ? true : false}>
+                        <PostButton disabled={!editorText ? true : false}
+                            onClick={handlePost}
+                        >
                             Post
                         </PostButton>
                     </ShareCreation>

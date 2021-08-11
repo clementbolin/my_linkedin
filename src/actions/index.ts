@@ -1,4 +1,4 @@
-import { auth, provider } from "../firebase"
+import db, { auth, provider, storage } from "../firebase"
 import firebase from "firebase"
 import { SET_USER } from "./actionTypes"
 
@@ -35,5 +35,37 @@ export const signOutAPI = () => {
         auth.signOut()
             .then(() => dispatch(setUser(null)))
             .catch((err) => alert(err))
+    }
+}
+
+export const postArticleAPI = (payload: any) => {
+    return (dispatch: any) => {
+        console.log(payload)
+        if (payload.image !== '' || payload.image !== undefined) {
+            const upload = storage
+                .ref(`images/${payload.image.name}`)
+                .put(payload.image)
+            upload.on('state_changed', (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log(`progress: ${progress}%`)
+                if (snapshot.state === 'RUNNING')
+                    console.log(`progress: ${progress}%`)
+            }, err => console.log(err.code),
+            async () => {
+                const downloadURL = await upload.snapshot.ref.getDownloadURL()
+                db.collection('articles').add({
+                    actor: {
+                        description: payload.user.email,
+                        title: payload.user.displayName,
+                        date: payload.timestamp,
+                        image: payload.user.photoURL
+                    },
+                    video: payload.video,
+                    sharedImg: downloadURL,
+                    comments: 0,
+                    description: payload.description
+                })
+            })
+        }
     }
 }
