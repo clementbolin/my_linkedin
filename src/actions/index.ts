@@ -1,10 +1,17 @@
 import db, { auth, provider, storage } from "../firebase"
 import firebase from "firebase"
-import { SET_USER } from "./actionTypes"
+import { SET_LOADING, SET_USER } from "./actionTypes"
 
 export const setUser = (payload: firebase.User | null) => ({
     type: SET_USER,
     payload: payload
+})
+
+export const setLoading =(status: boolean) => ({
+    type: SET_LOADING,
+    payload: {
+        load: status
+    }
 })
 
 export const signInAPI = () => {
@@ -41,6 +48,7 @@ export const signOutAPI = () => {
 export const postArticleAPI = (payload: any) => {
     return (dispatch: any) => {
         console.log(payload)
+        dispatch(setLoading(true))
         if (payload.image !== '' || payload.image !== undefined) {
             const upload = storage
                 .ref(`images/${payload.image.name}`)
@@ -65,7 +73,22 @@ export const postArticleAPI = (payload: any) => {
                     comments: 0,
                     description: payload.description
                 })
+                dispatch(setLoading(false))
             })
-        }
+        } else if (payload.video) {
+            db.collection('articles').add({
+                actor: {
+                    description: payload.user.email,
+                    title: payload.user.displayName,
+                    date: payload.timestamp,
+                    image: payload.user.photoURL
+                },
+                video: payload.video,
+                sharedImg: "",
+                comments: 0,
+                description: payload.description
+            })
+            dispatch(setLoading(false))
+        } 
     }
 }

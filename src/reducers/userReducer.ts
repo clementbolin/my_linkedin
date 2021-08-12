@@ -1,4 +1,4 @@
-import { SET_USER } from "../actions/actionTypes";
+import { SET_LOADING, SET_USER } from "../actions/actionTypes";
 import { LoginAction } from "./types";
 
 export type UserState = {
@@ -15,6 +15,11 @@ export const userReducer = (state: UserState = INITIAL_STATE, action: LoginActio
             return {
                 ...state,
                 user: action.payload  
+            }
+        case SET_LOADING:
+            return {
+                ...state,
+                user: action.payload
             }
         default:
             return state;

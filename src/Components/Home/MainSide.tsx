@@ -9,9 +9,14 @@ import { AiFillLike, AiFillHeart, AiOutlineComment } from 'react-icons/ai'
 import Photo from './../../assets/naruto.jpeg'
 import { PostModal } from './PostModal'
 import { useState } from 'react'
+import Spinner from './../../assets/spinner.svg'
+import { useSelector } from 'react-redux'
+import { UserState } from '../../reducers/userReducer'
 
 export const MainComponent = (): JSX.Element => {
+    const user = useSelector<UserState, UserState["user"]>((state) => state.user)
     const [showModal, setShowModal] = useState<string>('close')
+    console.log(user)
 
     const handleClick = (e: any) => {
         e.preventDefault()
@@ -32,6 +37,7 @@ export const MainComponent = (): JSX.Element => {
     return (
         <Container>
             <ShareBox>
+                {}
                 <div>
                     <img src={PictureUsr} alt="" className="img"/>
                     <button onClick={handleClick}>Start a post</button>
@@ -55,7 +61,11 @@ export const MainComponent = (): JSX.Element => {
                     </button>
                 </div>
             </ShareBox>
-            <div>
+            <Content>
+                {
+                    (user != null && user.load != null && user.load) &&
+                    <img src={Spinner} alt="" />
+                }
                 <Article>
                     <SharedActor>
                         <a>
@@ -113,13 +123,17 @@ export const MainComponent = (): JSX.Element => {
                         </button>
                     </SocialAction>
                 </Article>
-            </div>
+            </Content>
             <PostModal showModal={showModal} handleClick={handleClick}/>
         </Container>
     )
 }
 
 const Container = styled.div`
+`
+
+const Content = styled.div`
+    text-align: center;
 `
 
 const CommonCard = styled.div`
