@@ -1,6 +1,8 @@
 import db, { auth, provider, storage } from "../firebase"
 import firebase from "firebase"
-import { SET_LOADING, SET_USER } from "./actionTypes"
+import { GET_ARTICLES, SET_LOADING, SET_USER } from "./actionTypes"
+import { Dispatch } from "react"
+import { type } from "os"
 
 export const setUser = (payload: firebase.User | null) => ({
     type: SET_USER,
@@ -12,6 +14,11 @@ export const setLoading =(status: boolean) => ({
     payload: {
         load: status
     }
+})
+
+export const getArticlesData = (payload: any) => ({
+    type: GET_ARTICLES,
+    payload: payload
 })
 
 export const signInAPI = () => {
@@ -90,5 +97,19 @@ export const postArticleAPI = (payload: any) => {
             })
             dispatch(setLoading(false))
         } 
+    }
+}
+
+export const getArticlesAPI = () => {
+    return (dispatch: Dispatch<any>) => {
+        let payload
+
+        db.collection('articles')
+            .orderBy('actor.date', 'desc')
+            .onSnapshot((snapshot) => {
+                payload = snapshot.docs.map((doc) => doc.data())
+                console.log(payload)
+                dispatch(getArticlesData(payload))
+            })
     }
 }

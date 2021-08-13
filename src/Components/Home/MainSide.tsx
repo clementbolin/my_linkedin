@@ -8,20 +8,35 @@ import { IoMdShareAlt } from 'react-icons/io'
 import { AiFillLike, AiFillHeart, AiOutlineComment } from 'react-icons/ai'
 import Photo from './../../assets/naruto.jpeg'
 import { PostModal } from './PostModal'
-import { useState } from 'react'
+import { Dispatch, useState } from 'react'
 import Spinner from './../../assets/spinner.svg'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { UserState } from '../../reducers/userReducer'
+import { useCallback } from 'react'
+import { getArticlesAPI } from '../../actions'
+import { useEffect } from 'react'
+import ReactPlayer from 'react-player'
 
 export const MainComponent = (): JSX.Element => {
     const user = useSelector<UserState, UserState["user"]>((state) => state.user)
+    const articles = useSelector<UserState, UserState['articles']>((state) => state.articles)
     const [showModal, setShowModal] = useState<string>('close')
-    console.log(user)
+
+    const dispatch: Dispatch<any> = useDispatch()
+    const getArticles = useCallback(
+        () => dispatch(getArticlesAPI()),
+        [dispatch]
+    )
+
+    useEffect(() => {
+        getArticles()
+    }, [])
 
     const handleClick = (e: any) => {
         e.preventDefault()
         // if (e.target !== e.currentTarget)
         //     return
+        console.log(articles)
         switch (showModal) {
             case 'close':
                 setShowModal('open')
@@ -35,6 +50,11 @@ export const MainComponent = (): JSX.Element => {
         }
     }
     return (
+        <>
+        {
+            articles.length === 0 ?
+                <p>There are no articles</p>
+            :
         <Container>
             <ShareBox>
                 {}
@@ -66,66 +86,83 @@ export const MainComponent = (): JSX.Element => {
                     (user != null && user.load != null && user.load) &&
                     <img src={Spinner} alt="" />
                 }
-                <Article>
-                    <SharedActor>
-                        <a>
-                            <img src={PictureUsr} alt="" className="img"/>
-                            <div>
-                                <span>Title</span>
-                                <span>Info</span>
-                                <span>Date</span> 
-                            </div>
-                        </a>
-                        <button>
-                            <BsThreeDots />
-                        </button>
-                    </SharedActor>
-                    <Description>Description</Description>
-                    <ShareImage>
-                            <img src={Photo} alt="" className="img"/>
-                    </ShareImage>
-                    <SocialCount>
-                        <li>
-                            <button>
-                                <AiFillLike />
-                                <AiFillHeart />
-                                <span>75</span>
-                            </button>
-                        </li>
-                        <li>
-                            <a>2 comments</a>
-                        </li>
-                    </SocialCount>
-                    <SocialAction>
-                        <button>
-                            <div>
-                                <AiFillLike />
-                            </div>
-                            <span>Like</span>
-                        </button>
-                        <button>
-                            <div>
-                                <AiOutlineComment />
-                            </div>
-                            <span>Comments</span>
-                        </button>
-                        <button>
-                            <div>
-                                <IoMdShareAlt />
-                            </div>
-                            <span>Share</span>
-                        </button>
-                        <button>
-                            <div>
-                                <IoMdShareAlt />
-                            </div>
-                            <span>Send</span>
-                        </button>
-                    </SocialAction>
-                </Article>
+                {
+                    articles.length > 0 &&
+                    articles.map((article: any, idx) => {
+                        return (
+                        <Article key={idx}>
+                            <SharedActor>
+                                <a>
+                                    <img src={article.actor.image === "" ? PictureUsr : article.actor.image} alt="" className="img"/>
+                                    <div>
+                                        <span>{article.actor.title}</span>
+                                        <span>{article.actor.description}</span>
+                                        <span>{article.actor.date.toDate().toLocaleDateString()}</span> 
+                                    </div>
+                                </a>
+                                <button>
+                                    <BsThreeDots />
+                                </button>
+                            </SharedActor>
+                            <Description>{article.description}</Description>
+                            <ShareImage>
+                                    {
+                                        !article.sharedImg && article.video ? (
+                                            <ReactPlayer width={'100%'} url={article.video} />
+                                        ) : (
+                                        article.sharedImg && 
+                                            <img src={article.sharedImg} alt="" />
+                                        )
+                                    }
+                                    
+                            </ShareImage>
+                            <SocialCount>
+                                <li>
+                                    <button>
+                                        <AiFillLike />
+                                        <AiFillHeart />
+                                        <span>75</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <a>2 comments</a>
+                                </li>
+                            </SocialCount>
+                            <SocialAction>
+                                <button>
+                                    <div>
+                                        <AiFillLike />
+                                    </div>
+                                    <span>Like</span>
+                                </button>
+                                <button>
+                                    <div>
+                                        <AiOutlineComment />
+                                    </div>
+                                    <span>Comments</span>
+                                </button>
+                                <button>
+                                    <div>
+                                        <IoMdShareAlt />
+                                    </div>
+                                    <span>Share</span>
+                                </button>
+                                <button>
+                                    <div>
+                                        <IoMdShareAlt />
+                                    </div>
+                                    <span>Send</span>
+                                </button>
+                            </SocialAction>
+                        </Article>
+                        )
+                    })
+                }
             </Content>
             <PostModal showModal={showModal} handleClick={handleClick}/>
         </Container>
+        }
+        </>
     )
 }
 
