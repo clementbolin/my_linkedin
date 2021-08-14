@@ -303,6 +303,9 @@ const Editor = styled.div`
     textarea {
         width: 100%;
         min-height: 100px;
+        border: none;
+        word-break: break-word;
+        overflow-y: auto;
         resize: none;
     }
 
