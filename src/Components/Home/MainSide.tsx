@@ -6,7 +6,6 @@ import { BsThreeDots } from "react-icons/bs";
 import { GrArticle } from "react-icons/gr";
 import { IoMdShareAlt } from "react-icons/io";
 import { AiFillLike, AiFillHeart, AiOutlineComment } from "react-icons/ai";
-import Photo from "./../../assets/naruto.jpeg";
 import { PostModal } from "./PostModal";
 import { Dispatch, useState } from "react";
 import Spinner from "./../../assets/spinner.svg";
@@ -16,7 +15,6 @@ import { useCallback } from "react";
 import { getArticlesAPI } from "../../actions";
 import { useEffect } from "react";
 import ReactPlayer from "react-player";
-import { RiSdCardFill } from "react-icons/ri";
 
 export const MainComponent = (): JSX.Element => {
   const user = useSelector<UserState, UserState["user"]>((state) => state.user);
