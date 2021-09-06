@@ -76,7 +76,7 @@ export const PostModal: React.FC<Props> = (props) => {
             <Header>
               <h2>Create a post</h2>
               <button onClick={reset}>
-                <AiOutlineClose />
+                <AiOutlineClose fontSize='18px'/>
               </button>
             </Header>
             <ShareContent>
@@ -206,8 +206,16 @@ const Header = styled.div`
     height: 40px;
     width: 40px;
     min-width: auto;
+    border: none;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.15);
     color: rgba(0, 0, 0, 0.5) svg {
       pointer-events: none;
+    }
+    &:hover {
+      color: black;
+      cursor: pointer;
+      transition: all 0.3s;
     }
   }
 `;
