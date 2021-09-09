@@ -1,11 +1,11 @@
 {
     "firebaseConfig": {
-        "apiKey": "AIzaSyCmpHyLoW2FieJUl6qxJkZP6LQHbDReZ1E",
-        "authDomain": "my-linkedin-d6268.firebaseapp.com",
-        "projectID": "my-linkedin-d6268",
-        "storageBucket": "my-linkedin-d6268.appspot.com",
-        "messagingSenderId": "802812898226",
-        "appId": "1:802812898226:web:c8aaca622483db4ace92ab"
+        "apiKey": "",
+        "authDomain": "",
+        "projectID": "",
+        "storageBucket": "",
+        "messagingSenderId": "",
+        "appId": ""
     },
-    "reCaptcha": "6LdODlIcAAAAAFGKoyniLhcLOPpR23FGA7Gb5K7R"
+    "reCaptcha": ""
 }
